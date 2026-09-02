@@ -39,6 +39,7 @@ export default async function TcgPage({
           <Link
             key={card.id}
             href={`/${locale}/card/${card.cardSlug}/${card.printingSlug}`}
+            prefetch={false}
             className="border border-[var(--ink)] bg-[var(--paper)] p-4 hover:bg-[var(--ink)] hover:text-[var(--paper)]"
           >
             <p className="font-semibold">{card.cardName}</p>

@@ -68,6 +68,7 @@ export default async function LocalizedHome({
             <Link
               key={card.id}
               href={`/${locale}/card/${card.cardSlug}/${card.printingSlug}`}
+              prefetch={false}
               className="group border border-[var(--ink)] bg-[var(--paper)] p-4 hover:bg-[var(--ink)] hover:text-[var(--paper)]"
             >
               <div className="flex items-center justify-between gap-4">
