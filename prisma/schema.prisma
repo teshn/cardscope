@@ -1,0 +1,211 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum CardViewReferrer {
+  DIRECT
+  SEARCH
+  SOCIAL
+  INTERNAL
+  UNKNOWN
+}
+
+model Tcg {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  sets        CardSet[]
+  cards       Card[]
+  rarities    Rarity[]
+  categories  Category[]
+  viewEvents  CardViewEvent[]
+
+  @@index([name])
+}
+
+model CardSet {
+  id          String    @id @default(cuid())
+  tcgId       String
+  name        String
+  slug        String
+  setCode     String
+  releaseDate DateTime?
+  totalCards  Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tcg         Tcg       @relation(fields: [tcgId], references: [id], onDelete: Cascade)
+  printings   CardPrinting[]
+
+  @@unique([tcgId, setCode])
+  @@unique([tcgId, slug])
+  @@index([releaseDate])
+}
+
+model Card {
+  id           String    @id @default(cuid())
+  tcgId        String
+  name         String
+  slug         String
+  oracleText   String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  tcg          Tcg       @relation(fields: [tcgId], references: [id], onDelete: Cascade)
+  printings    CardPrinting[]
+  cardMappings CardCategory[]
+
+  @@unique([tcgId, slug])
+  @@index([name])
+}
+
+model Rarity {
+  id         String    @id @default(cuid())
+  tcgId      String
+  name       String
+  slug       String
+  orderIndex Int       @default(0)
+
+  tcg        Tcg       @relation(fields: [tcgId], references: [id], onDelete: Cascade)
+  printings  CardPrinting[]
+
+  @@unique([tcgId, slug])
+}
+
+model Illustrator {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  biography   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  printings   CardPrinting[]
+
+  @@index([name])
+}
+
+model Category {
+  id         String    @id @default(cuid())
+  tcgId      String
+  name       String
+  slug       String
+  isSystem   Boolean   @default(false)
+
+  tcg        Tcg       @relation(fields: [tcgId], references: [id], onDelete: Cascade)
+  cardLinks  CardCategory[]
+  viewEvents CardViewEvent[]
+
+  @@unique([tcgId, slug])
+}
+
+model CardCategory {
+  cardId     String
+  categoryId String
+
+  card       Card      @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([cardId, categoryId])
+  @@index([categoryId, cardId])
+}
+
+model CardPrinting {
+  id                String      @id @default(cuid())
+  cardId            String
+  setId             String
+  rarityId          String?
+  illustratorId     String?
+  printingSlug      String
+  cardNumber        String
+  variant           String
+  language          String      @default("en")
+  printedAt         DateTime?
+  widthMm           Decimal?    @db.Decimal(8, 2)
+  heightMm          Decimal?    @db.Decimal(8, 2)
+  weightGrams       Decimal?    @db.Decimal(8, 3)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  card              Card        @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  set               CardSet     @relation(fields: [setId], references: [id], onDelete: Cascade)
+  rarity            Rarity?     @relation(fields: [rarityId], references: [id], onDelete: SetNull)
+  illustrator       Illustrator? @relation(fields: [illustratorId], references: [id], onDelete: SetNull)
+  mediaAssets       MediaAsset[]
+  viewEvents        CardViewEvent[]
+
+  @@unique([cardId, setId, cardNumber, language, variant])
+  @@unique([cardId, printingSlug])
+  @@index([cardNumber])
+  @@index([printedAt])
+}
+
+model MediaAsset {
+  id              String    @id @default(cuid())
+  cardPrintingId  String
+  mediaType       MediaType
+  assetType       String
+  objectKey       String
+  cdnUrl          String
+  width           Int?
+  height          Int?
+  createdAt       DateTime  @default(now())
+
+  cardPrinting    CardPrinting @relation(fields: [cardPrintingId], references: [id], onDelete: Cascade)
+
+  @@index([cardPrintingId, mediaType])
+}
+
+model CardViewEvent {
+  id             BigInt            @id @default(autoincrement())
+  tcgId          String
+  cardPrintingId String
+  categoryId     String?
+  locale         String
+  referrer       CardViewReferrer  @default(UNKNOWN)
+  createdAt      DateTime          @default(now())
+
+  tcg            Tcg               @relation(fields: [tcgId], references: [id], onDelete: Cascade)
+  cardPrinting   CardPrinting      @relation(fields: [cardPrintingId], references: [id], onDelete: Cascade)
+  category       Category?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([tcgId, createdAt])
+  @@index([categoryId, createdAt])
+  @@index([cardPrintingId, createdAt])
+}
+
+model CardMetricDaily {
+  id             String   @id @default(cuid())
+  day            DateTime
+  tcgId          String
+  categoryId     String?
+  cardPrintingId String
+  viewCount      Int      @default(0)
+
+  @@unique([day, tcgId, cardPrintingId, categoryId])
+  @@index([day, tcgId, viewCount])
+}
+
+model TranslationString {
+  id        String   @id @default(cuid())
+  locale    String
+  namespace String
+  key       String
+  value     String
+
+  @@unique([locale, namespace, key])
+}

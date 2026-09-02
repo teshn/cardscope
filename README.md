@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CardScope
 
-## Getting Started
+CardScope is a Next.js fullstack app for trading-card lookup and authenticity-oriented inspection.
 
-First, run the development server:
+## MVP Features
+
+- Pixel-minimal, cream-first UI with modern motion
+- Locale routing for English and German (`/en`, `/de`)
+- Mega menu with popular TCG hubs
+- Card detail pages with dimensions, weight, print date, variant, illustrator, set, and rarity
+- Draggable card tilt canvas for visual reflection checks (placeholder media stage)
+- SEO foundation: metadata, OG image endpoint, robots, sitemap, JSON-LD
+- Ads foundation: consent-gated ad slots for AdSense
+- Donations: timed popup after 2 page views (Buy Me a Coffee, Ko-fi, Ethereum)
+- CSV import admin prototype
+- Prisma schema for normalized card-printing data model
+
+## Stack
+
+- Next.js 16 (App Router)
+- TypeScript + Tailwind CSS v4
+- Prisma ORM + PostgreSQL schema
+- Supabase client utilities (integration-ready)
+- Sonner toasts + Framer Motion
+
+## Quick Start
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create environment file:
+
+```bash
+cp .env.example .env
+```
+
+3. Generate Prisma client:
+
+```bash
+npm run db:generate
+```
+
+4. Run development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Useful Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `npm run dev` - Start local dev server
+- `npm run build` - Build production bundle
+- `npm run lint` - Run ESLint
+- `npm run typecheck` - Run TypeScript checks
+- `npm run db:generate` - Generate Prisma client
+- `npm run db:migrate` - Run Prisma migrations
+- `npm run db:push` - Push schema for prototyping
+- `npm run db:seed` - Seed TCG baseline data
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Notes
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Configure `NEXT_PUBLIC_SITE_URL` for correct canonical and OG links.
+- Add your AdSense IDs in `.env` for live ad rendering.
+- Replace placeholder card media with your generated images/videos in later phases.
