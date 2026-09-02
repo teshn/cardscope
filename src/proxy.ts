@@ -7,12 +7,36 @@ function hasLocale(pathname: string) {
   return locales.some((locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
 }
 
+function isMaintenanceModeEnabled() {
+  const value = process.env.MAINTENANCE_MODE;
+  if (!value) {
+    return false;
+  }
+
+  const normalized = value.toLowerCase();
+  return normalized === "true" || normalized === "1" || normalized === "on";
+}
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (isMaintenanceModeEnabled()) {
+    if (pathname === "/maintenance") {
+      return NextResponse.next();
+    }
+
+    if (pathname.startsWith("/_next") || pathname.includes(".")) {
+      return NextResponse.next();
+    }
+
+    const maintenanceUrl = request.nextUrl.clone();
+    maintenanceUrl.pathname = "/maintenance";
+    maintenanceUrl.search = "";
+    return NextResponse.rewrite(maintenanceUrl);
+  }
+
   if (
     pathname.startsWith("/_next") ||
-    pathname.startsWith("/api") ||
     pathname === "/robots.txt" ||
     pathname === "/sitemap.xml" ||
     pathname.includes(".")

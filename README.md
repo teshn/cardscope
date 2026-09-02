@@ -65,3 +65,4 @@ npm run dev
 - Configure `NEXT_PUBLIC_SITE_URL` for correct canonical and OG links.
 - Add your AdSense IDs in `.env` for live ad rendering.
 - Replace placeholder card media with your generated images/videos in later phases.
+- Set `MAINTENANCE_MODE=true` on Vercel to force all non-static routes to render `/maintenance`.
