@@ -8,13 +8,20 @@ function hasLocale(pathname: string) {
 }
 
 function isMaintenanceModeEnabled() {
-  const value = process.env.MAINTENANCE_MODE;
-  if (!value) {
+  const rawValue =
+    process.env.MAINTENANCE_MODE ??
+    process.env.NEXT_PUBLIC_MAINTENANCE_MODE;
+
+  if (!rawValue) {
     return false;
   }
 
-  const normalized = value.toLowerCase();
-  return normalized === "true" || normalized === "1" || normalized === "on";
+  const normalized = rawValue
+    .trim()
+    .replace(/^['"]|['"]$/g, "")
+    .toLowerCase();
+
+  return ["true", "1", "on", "yes", "enabled"].includes(normalized);
 }
 
 export function proxy(request: NextRequest) {
@@ -32,7 +39,7 @@ export function proxy(request: NextRequest) {
     const maintenanceUrl = request.nextUrl.clone();
     maintenanceUrl.pathname = "/maintenance";
     maintenanceUrl.search = "";
-    return NextResponse.rewrite(maintenanceUrl);
+    return NextResponse.redirect(maintenanceUrl);
   }
 
   if (

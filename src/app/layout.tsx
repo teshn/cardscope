@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Silkscreen, Space_Grotesk } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { ToastProvider } from "@/components/ui/toast-provider";
 import { organizationStructuredData } from "@/lib/seo/structuredData";
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body className="min-h-full flex flex-col bg-[var(--paper)] text-[var(--ink)] antialiased">
         {children}
         <ToastProvider />
+        <SpeedInsights />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}

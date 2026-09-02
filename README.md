@@ -65,4 +65,8 @@ npm run dev
 - Configure `NEXT_PUBLIC_SITE_URL` for correct canonical and OG links.
 - Add your AdSense IDs in `.env` for live ad rendering.
 - Replace placeholder card media with your generated images/videos in later phases.
-- Set `MAINTENANCE_MODE=true` on Vercel to force all non-static routes to render `/maintenance`.
+- Speed Insights is enabled through `@vercel/speed-insights` in the root layout.
+- Maintenance mode:
+	- Local: set `MAINTENANCE_MODE=true` in `.env.local`, then restart `npm run dev`.
+	- Vercel: set `MAINTENANCE_MODE=true` (or `NEXT_PUBLIC_MAINTENANCE_MODE=true`) in project env vars and redeploy.
+	- Values wrapped in quotes or with spaces are supported (e.g. `"true"`, ` true `).
