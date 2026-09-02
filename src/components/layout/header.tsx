@@ -5,6 +5,8 @@ import type { Locale } from "@/types/card";
 import { Logo } from "./logo";
 import { MegaMenu } from "../navigation/mega-menu";
 
+//Test
+
 type HeaderProps = {
   locale: Locale;
 };
