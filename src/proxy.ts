@@ -20,6 +20,10 @@ function stripLocalePrefix(pathname: string, locale: (typeof localePrefixes)[num
   return nextPath ? nextPath : "/";
 }
 
+function normalizePublicPathname(pathname: string) {
+  return pathname === "" ? "/" : pathname;
+}
+
 function isMaintenanceModeEnabled() {
   const rawValue =
     process.env.MAINTENANCE_MODE ??
@@ -76,8 +80,14 @@ export function proxy(request: NextRequest) {
 
   const rewriteUrl = request.nextUrl.clone();
   rewriteUrl.pathname = pathname === "/" ? `/${defaultLocale}` : `/${defaultLocale}${pathname}`;
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-public-pathname", normalizePublicPathname(pathname));
 
-  return NextResponse.rewrite(rewriteUrl);
+  return NextResponse.rewrite(rewriteUrl, {
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }
 
 export const config = {
