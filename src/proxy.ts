@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 import { defaultLocale } from "@/lib/i18n/config";
 
-const localePrefixes = [defaultLocale, "de"] as const;
+const localePrefixes = ["de"] as const;
 
 function getLocalePrefix(pathname: string) {
   return localePrefixes.find(
@@ -72,10 +72,6 @@ export function proxy(request: NextRequest) {
     const publicPath = stripLocalePrefix(pathname, locale);
 
     if (publicPath === "/admin/import") {
-      if (locale === defaultLocale) {
-        return NextResponse.next();
-      }
-
       const redirectUrl = request.nextUrl.clone();
       redirectUrl.pathname = `/${defaultLocale}/admin/import`;
       return NextResponse.redirect(redirectUrl);

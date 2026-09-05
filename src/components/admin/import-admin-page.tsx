@@ -40,7 +40,11 @@ export function ImportAdminPage() {
       </section>
 
       <section className="border border-[var(--ink)] bg-[var(--paper)] p-4">
+        <label htmlFor="card-import-csv" className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em]">
+          Card import CSV
+        </label>
         <textarea
+          id="card-import-csv"
           className="h-64 w-full resize-y border border-[var(--ink)] bg-[var(--paper-strong)] p-3 font-mono text-xs"
           placeholder="tcg,card_name,card_slug,printing_slug,set_name,set_code,card_number,rarity,illustrator,width_mm,height_mm,weight_grams,printed_at,variant,language,image_url"
           value={csv}
