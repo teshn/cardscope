@@ -5,9 +5,13 @@ import { getCardsByIllustrator, illustrators } from "@/data/mock-cards";
 
 type IllustratorPageContentProps = {
   slug: string;
+  pathPrefix?: string;
 };
 
-export function IllustratorPageContent({ slug }: IllustratorPageContentProps) {
+export function IllustratorPageContent({
+  slug,
+  pathPrefix = "",
+}: IllustratorPageContentProps) {
   const illustrator = illustrators.find((entry) => entry.slug === slug);
   if (!illustrator) {
     notFound();
@@ -26,7 +30,7 @@ export function IllustratorPageContent({ slug }: IllustratorPageContentProps) {
         {cards.map((card) => (
           <Link
             key={card.id}
-            href={`/card/${card.cardSlug}/${card.printingSlug}`}
+            href={`${pathPrefix}/card/${card.cardSlug}/${card.printingSlug}`}
             className="border border-[var(--ink)] bg-[var(--paper)] p-4 hover:bg-[var(--ink)] hover:text-[var(--paper)]"
           >
             <p className="font-semibold">{card.cardName}</p>

@@ -7,9 +7,10 @@ import type { Locale } from "@/types/card";
 
 type HomePageProps = {
   locale: Locale;
+  pathPrefix?: string;
 };
 
-export function HomePage({ locale }: HomePageProps) {
+export function HomePage({ locale, pathPrefix = "" }: HomePageProps) {
   const messages = getMessages(locale);
 
   return (
@@ -50,7 +51,7 @@ export function HomePage({ locale }: HomePageProps) {
           {tcgs.map((tcg) => (
             <Link
               key={tcg.slug}
-              href={`/tcg/${tcg.slug}`}
+              href={`${pathPrefix}/tcg/${tcg.slug}`}
               className="border-2 border-[var(--ink)] bg-[var(--paper)] p-4 transition-transform duration-200 hover:-translate-y-1"
             >
               <p className="font-semibold">{tcg.name}</p>
@@ -66,7 +67,7 @@ export function HomePage({ locale }: HomePageProps) {
           {cardPrintings.slice(0, 4).map((card) => (
             <Link
               key={card.id}
-              href={`/card/${card.cardSlug}/${card.printingSlug}`}
+              href={`${pathPrefix}/card/${card.cardSlug}/${card.printingSlug}`}
               className="group border border-[var(--ink)] bg-[var(--paper)] p-4 hover:bg-[var(--ink)] hover:text-[var(--paper)]"
             >
               <div className="flex items-center justify-between gap-4">

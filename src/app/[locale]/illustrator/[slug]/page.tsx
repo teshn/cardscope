@@ -31,5 +31,5 @@ export default async function IllustratorPage({
     notFound();
   }
 
-  return <IllustratorPageContent slug={slug} />;
+  return <IllustratorPageContent slug={slug} pathPrefix={`/${locale}`} />;
 }

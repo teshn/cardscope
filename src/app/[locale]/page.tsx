@@ -29,5 +29,5 @@ export default async function LocalizedHome({
     return null;
   }
 
-  return <HomePage locale={locale} />;
+  return <HomePage locale={locale} pathPrefix={`/${locale}`} />;
 }
