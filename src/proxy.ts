@@ -20,6 +20,18 @@ function stripLocalePrefix(pathname: string, locale: (typeof localePrefixes)[num
   return nextPath ? nextPath : "/";
 }
 
+function hasCleanPublicRoute(pathname: string) {
+  return (
+    pathname === "/" ||
+    /^\/illustrator\/[^/]+$/.test(pathname) ||
+    /^\/tcg\/[^/]+$/.test(pathname) ||
+    /^\/category\/[^/]+$/.test(pathname) ||
+    /^\/card\/[^/]+\/[^/]+$/.test(pathname) ||
+    pathname === "/legal/privacy" ||
+    pathname === "/legal/cookies"
+  );
+}
+
 function isMaintenanceModeEnabled() {
   const rawValue =
     process.env.MAINTENANCE_MODE ??
@@ -73,6 +85,10 @@ export function proxy(request: NextRequest) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = stripLocalePrefix(pathname, locale);
     return NextResponse.redirect(redirectUrl);
+  }
+
+  if (hasCleanPublicRoute(pathname)) {
+    return NextResponse.next();
   }
 
   const rewriteUrl = request.nextUrl.clone();
