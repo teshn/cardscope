@@ -3,47 +3,76 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-import { shouldSuppressDonationPopup, suppressDonationPopup } from "@/lib/consent/cmp";
+import {
+  dismissDonationPopup,
+  shouldSuppressDonationPopup,
+  suppressDonationPopup,
+} from "@/lib/consent/cmp";
 
 type DonationPopupProps = {
   pageViews: number;
 };
 
-const DISMISS_KEY = "cardscope_donation_next_show";
-const SEVEN_DAYS = 1000 * 60 * 60 * 24 * 7;
+const VISIT_STARTED_KEY = "cardscope_visit_started_at";
+const ONE_MINUTE = 1000 * 60;
+
+function getVisitStartedAt() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const visitStartedRaw = window.sessionStorage.getItem(VISIT_STARTED_KEY);
+  const visitStartedAt = visitStartedRaw ? Number(visitStartedRaw) : Date.now();
+
+  return Number.isNaN(visitStartedAt) ? Date.now() : visitStartedAt;
+}
 
 export function DonationPopup({ pageViews }: DonationPopupProps) {
-  const [open, setOpen] = useState(false);
+  const [dismissed, setDismissed] = useState(() => shouldSuppressDonationPopup());
+  const [visitStartedAt] = useState(() => getVisitStartedAt());
+  const [timeOnSiteReached, setTimeOnSiteReached] = useState(() => {
+    if (visitStartedAt === null) {
+      return false;
+    }
+
+    return Date.now() >= visitStartedAt + ONE_MINUTE;
+  });
 
   useEffect(() => {
-    if (shouldSuppressDonationPopup()) {
+    if (dismissed || visitStartedAt === null) {
       return;
     }
 
-    const nextShowRaw = window.localStorage.getItem(DISMISS_KEY);
-    const nextShowAt = nextShowRaw ? Number(nextShowRaw) : 0;
-    const canShow = Date.now() >= nextShowAt;
-
-    if (canShow && pageViews >= 2) {
-      const timerId = window.setTimeout(() => {
-        setOpen(true);
-      }, 0);
-
-      return () => {
-        window.clearTimeout(timerId);
-      };
+    const visitStartedRaw = window.sessionStorage.getItem(VISIT_STARTED_KEY);
+    if (!visitStartedRaw || Number.isNaN(Number(visitStartedRaw))) {
+      window.sessionStorage.setItem(VISIT_STARTED_KEY, String(visitStartedAt));
     }
-  }, [pageViews]);
+
+    const delay = Math.max(0, visitStartedAt + ONE_MINUTE - Date.now());
+    if (delay === 0) {
+      return;
+    }
+
+    const timerId = window.setTimeout(() => {
+      setTimeOnSiteReached(true);
+    }, delay);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [dismissed, visitStartedAt]);
 
   function onLater() {
-    window.localStorage.setItem(DISMISS_KEY, String(Date.now() + SEVEN_DAYS));
-    setOpen(false);
+    dismissDonationPopup();
+    setDismissed(true);
   }
 
   function onNever() {
     suppressDonationPopup();
-    setOpen(false);
+    setDismissed(true);
   }
+
+  const open = !dismissed && (pageViews >= 2 || timeOnSiteReached);
 
   return (
     <AnimatePresence>

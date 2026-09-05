@@ -16,22 +16,22 @@ type PageShellProps = {
 
 export function PageShell({ locale, children }: PageShellProps) {
   const pathname = usePathname();
-  const [pageViews, setPageViews] = useState(() => {
-    if (typeof window === "undefined") {
-      return 1;
-    }
-
-    return Number(window.sessionStorage.getItem("cardscope_page_views") ?? "0") || 1;
-  });
+  const [pageViews, setPageViews] = useState(0);
 
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
 
-    const key = "cardscope_page_views";
-    const next = Number(window.sessionStorage.getItem(key) ?? "0") + 1;
-    window.sessionStorage.setItem(key, String(next));
+    const pageViewsKey = "cardscope_page_views";
+    const lastPathKey = "cardscope_last_page_view";
+    const pageViewsRaw = Number(window.sessionStorage.getItem(pageViewsKey) ?? "0");
+    const currentPageViews = Number.isNaN(pageViewsRaw) ? 0 : pageViewsRaw;
+    const lastPath = window.sessionStorage.getItem(lastPathKey);
+    const next = lastPath === pathname ? currentPageViews : currentPageViews + 1;
+
+    window.sessionStorage.setItem(pageViewsKey, String(next));
+    window.sessionStorage.setItem(lastPathKey, pathname);
 
     const raf = window.requestAnimationFrame(() => {
       setPageViews(next);

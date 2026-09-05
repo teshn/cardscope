@@ -1,6 +1,14 @@
 const CONSENT_KEY = "cardscope_cookie_consent";
 const DONATION_KEY = "cardscope_donation_optout";
+const DONATION_DISMISS_COOKIE = "cardscope_donation_dismissed";
 const CONSENT_EVENT = "cardscope-consent-change";
+const DONATION_DISMISS_MAX_AGE = 60 * 60 * 24;
+
+function hasCookie(name: string) {
+  return document.cookie
+    .split(";")
+    .some((cookie) => cookie.trim().startsWith(`${name}=`));
+}
 
 export type ConsentState = "accepted" | "rejected" | "unset";
 
@@ -45,12 +53,26 @@ export function shouldSuppressDonationPopup() {
   if (typeof window === "undefined") {
     return true;
   }
-  return window.localStorage.getItem(DONATION_KEY) === "true";
+
+  return (
+    window.localStorage.getItem(DONATION_KEY) === "true" ||
+    hasCookie(DONATION_DISMISS_COOKIE)
+  );
+}
+
+export function dismissDonationPopup() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  document.cookie = `${DONATION_DISMISS_COOKIE}=true; Max-Age=${DONATION_DISMISS_MAX_AGE}; Path=/; SameSite=Lax`;
 }
 
 export function suppressDonationPopup() {
   if (typeof window === "undefined") {
     return;
   }
+
+  dismissDonationPopup();
   window.localStorage.setItem(DONATION_KEY, "true");
 }

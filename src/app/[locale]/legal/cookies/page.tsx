@@ -16,6 +16,9 @@ export default async function CookiesPage({ params }: { params: CookiesPageParam
         Essential cookies keep navigation stable. Optional cookies are used only after consent for analytics and ads.
       </p>
       <p className="text-sm text-[var(--muted)]">
+        A local dismissal cookie is also used to keep the donation popup hidden for up to 24 hours after you close it.
+      </p>
+      <p className="text-sm text-[var(--muted)]">
         You can reject optional cookies in the consent banner and continue using core card lookup features.
       </p>
     </article>
