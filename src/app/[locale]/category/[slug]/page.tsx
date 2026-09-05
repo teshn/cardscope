@@ -32,13 +32,12 @@ export default async function CategoryPage({
     notFound();
   }
 
+  const isIllustratorCategory = slug === "illustrator";
   const cards = getCardsByCategory(slug);
 
-  if (!cards.length) {
+  if (!cards.length && !isIllustratorCategory) {
     notFound();
   }
-
-  const isIllustratorCategory = slug === "illustrator";
 
   return (
     <div className="space-y-6">

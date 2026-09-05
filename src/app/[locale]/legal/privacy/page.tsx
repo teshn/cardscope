@@ -4,7 +4,19 @@ import { notFound } from "next/navigation";
 
 type PrivacyPageParams = Promise<{ locale: string }>;
 
-export const metadata = canonicalMetadata("/legal/privacy");
+export async function generateMetadata({
+  params,
+}: {
+  params: PrivacyPageParams;
+}) {
+  const { locale } = await params;
+
+  if (!isLocale(locale)) {
+    return {};
+  }
+
+  return canonicalMetadata("/legal/privacy");
+}
 
 export default async function PrivacyPage({ params }: { params: PrivacyPageParams }) {
   const { locale } = await params;

@@ -27,6 +27,7 @@ function hasCleanPublicRoute(pathname: string) {
     /^\/tcg\/[^/]+$/.test(pathname) ||
     /^\/category\/[^/]+$/.test(pathname) ||
     /^\/card\/[^/]+\/[^/]+$/.test(pathname) ||
+    pathname === "/admin/import" ||
     pathname === "/legal/privacy" ||
     pathname === "/legal/cookies"
   );

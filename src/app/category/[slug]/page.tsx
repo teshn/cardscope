@@ -24,13 +24,12 @@ export default async function PublicCategoryPage({
   params: PublicCategoryPageParams;
 }) {
   const { slug } = await params;
+  const isIllustratorCategory = slug === "illustrator";
   const cards = getCardsByCategory(slug);
 
-  if (!cards.length) {
+  if (!cards.length && !isIllustratorCategory) {
     notFound();
   }
-
-  const isIllustratorCategory = slug === "illustrator";
 
   return (
     <PageShell locale={defaultLocale}>

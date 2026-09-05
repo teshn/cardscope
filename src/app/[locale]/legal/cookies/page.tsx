@@ -4,7 +4,19 @@ import { notFound } from "next/navigation";
 
 type CookiesPageParams = Promise<{ locale: string }>;
 
-export const metadata = canonicalMetadata("/legal/cookies");
+export async function generateMetadata({
+  params,
+}: {
+  params: CookiesPageParams;
+}) {
+  const { locale } = await params;
+
+  if (!isLocale(locale)) {
+    return {};
+  }
+
+  return canonicalMetadata("/legal/cookies");
+}
 
 export default async function CookiesPage({ params }: { params: CookiesPageParams }) {
   const { locale } = await params;

@@ -4,7 +4,19 @@ import { canonicalMetadata } from "@/lib/seo/metadata";
 
 type LocalizedHomeParams = Promise<{ locale: string }>;
 
-export const metadata = canonicalMetadata("/");
+export async function generateMetadata({
+  params,
+}: {
+  params: LocalizedHomeParams;
+}) {
+  const { locale } = await params;
+
+  if (!isLocale(locale)) {
+    return {};
+  }
+
+  return canonicalMetadata("/");
+}
 
 export default async function LocalizedHome({
   params,
