@@ -3,8 +3,23 @@ import { notFound } from "next/navigation";
 
 import { getCardsByCategory, illustrators } from "@/data/mock-cards";
 import { isLocale } from "@/lib/i18n/config";
+import { canonicalMetadata } from "@/lib/seo/metadata";
 
 type CategoryPageParams = Promise<{ locale: string; slug: string }>;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: CategoryPageParams;
+}) {
+  const { locale, slug } = await params;
+
+  if (!isLocale(locale)) {
+    return {};
+  }
+
+  return canonicalMetadata(`/category/${slug}`);
+}
 
 export default async function CategoryPage({
   params,

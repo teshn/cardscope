@@ -1,7 +1,10 @@
 import { isLocale } from "@/lib/i18n/config";
+import { canonicalMetadata } from "@/lib/seo/metadata";
 import { notFound } from "next/navigation";
 
 type PrivacyPageParams = Promise<{ locale: string }>;
+
+export const metadata = canonicalMetadata("/legal/privacy");
 
 export default async function PrivacyPage({ params }: { params: PrivacyPageParams }) {
   const { locale } = await params;
