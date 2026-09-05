@@ -11,7 +11,7 @@ CardScope is a Next.js fullstack app for trading-card lookup and authenticity-or
 - Draggable card tilt canvas for visual reflection checks (placeholder media stage)
 - SEO foundation: metadata, OG image endpoint, robots, sitemap, JSON-LD
 - Ads foundation: consent-gated ad slots for AdSense
-- Donations: timed popup after 2 page views (Buy Me a Coffee, Ko-fi, Ethereum)
+- Donations: popup after 2 page views or 1 minute, with a 24-hour dismissal cookie (Buy Me a Coffee, Ko-fi, Ethereum)
 - CSV import admin prototype
 - Prisma schema for normalized card-printing data model
 
