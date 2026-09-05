@@ -13,10 +13,13 @@ export default async function CookiesPage({ params }: { params: CookiesPageParam
     <article className="space-y-4 border-2 border-[var(--ink)] bg-[var(--paper)] p-6">
       <h1 className="text-3xl font-semibold tracking-tight">Cookie Policy</h1>
       <p className="text-sm text-[var(--muted)]">
-        Essential cookies keep navigation stable. Optional cookies are used only after consent for analytics and ads.
+        CardScope uses required cookies and storage entries to keep the site secure and functional. This includes
+        mandatory Vercel platform cookies (routing/security) and Vercel Speed Insights performance measurement that is
+        loaded on every page.
       </p>
       <p className="text-sm text-[var(--muted)]">
-        You can reject optional cookies in the consent banner and continue using core card lookup features.
+        Optional ad and marketing cookies are only enabled after consent. You can reject those optional cookies in the
+        consent banner and continue using core card lookup features.
       </p>
     </article>
   );

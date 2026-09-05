@@ -16,7 +16,8 @@ export default async function PrivacyPage({ params }: { params: PrivacyPageParam
         CardScope collects minimal telemetry for page performance and card view statistics. Personal data is not sold.
       </p>
       <p className="text-sm text-[var(--muted)]">
-        For ads and analytics cookies, consent is requested before activation in supported regions.
+        Ad and marketing cookies require consent before activation in supported regions. Required platform cookies and
+        Vercel Speed Insights may still run for secure delivery and baseline performance telemetry.
       </p>
     </article>
   );
