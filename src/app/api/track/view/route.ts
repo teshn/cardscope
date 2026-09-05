@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { defaultLocale } from "@/lib/i18n/config";
+
 const bodySchema = z.object({
   tcgSlug: z.string().min(2),
   cardPrintingId: z.string().min(4),
   categorySlug: z.string().optional(),
-  locale: z.enum(["en", "de"]),
+  locale: z.literal(defaultLocale),
   referrer: z.enum(["direct", "search", "social", "internal", "unknown"]).default("unknown"),
 });
 

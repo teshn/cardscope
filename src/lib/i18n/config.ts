@@ -1,6 +1,6 @@
-import { defaultLocale, locales, localeLabels } from "@/data/mock-cards";
+import { defaultLocale, locales } from "@/data/mock-cards";
 
-export { defaultLocale, locales, localeLabels };
+export { defaultLocale, locales };
 
 export function isLocale(value: string): value is (typeof locales)[number] {
   return locales.includes(value as (typeof locales)[number]);
@@ -22,23 +22,6 @@ export const messages = {
         "Use structured card facts, print data, and visual inspection tools to compare versions and spot suspicious offers.",
       ctaPrimary: "Start with popular TCGs",
       ctaSecondary: "View trending cards",
-    },
-  },
-  de: {
-    nav: {
-      browse: "Entdecken",
-      popularTcgs: "Beliebte TCGs",
-      important: "Wichtig",
-      donation: "Unterstuetzen",
-      searchPlaceholder: "Karte, Set oder Illustrator suchen",
-    },
-    hero: {
-      kicker: "Toolkit zur Kartenpruefung",
-      title: "Pruefe Sammelkarten mit verlaesslichen Details.",
-      subtitle:
-        "Nutze strukturierte Kartendaten, Druckinformationen und visuelle Pruefung, um Versionen zu vergleichen und verdaechtige Angebote zu erkennen.",
-      ctaPrimary: "Mit beliebten TCGs starten",
-      ctaSecondary: "Trendkarten ansehen",
     },
   },
 } as const;

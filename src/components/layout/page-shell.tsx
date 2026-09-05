@@ -46,7 +46,7 @@ export function PageShell({ locale, children }: PageShellProps) {
     <div className="min-h-screen bg-[var(--paper)] text-[var(--ink)]">
       <Header locale={locale} />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 md:px-6">{children}</main>
-      <Footer locale={locale} />
+      <Footer />
       <ConsentBanner />
       <DonationPopup pageViews={pageViews} />
     </div>
