@@ -1,7 +1,6 @@
-import LocalizedHome from "@/app/[locale]/page";
-
+import { HomePage } from "@/components/home/home-page";
 import { defaultLocale } from "@/lib/i18n/config";
 
 export default function Home() {
-  return <LocalizedHome params={Promise.resolve({ locale: defaultLocale })} />;
+  return <HomePage locale={defaultLocale} />;
 }

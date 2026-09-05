@@ -12,7 +12,11 @@ function getLocalePrefix(pathname: string) {
 }
 
 function stripLocalePrefix(pathname: string, locale: (typeof localePrefixes)[number]) {
-  const nextPath = pathname.slice(locale.length + 1);
+  const localePrefix = `/${locale}`;
+  const nextPath = pathname.startsWith(localePrefix)
+    ? pathname.slice(localePrefix.length)
+    : pathname;
+
   return nextPath ? nextPath : "/";
 }
 
