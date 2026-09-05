@@ -1,10 +1,23 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-import { defaultLocale, locales } from "@/lib/i18n/config";
+import { defaultLocale } from "@/lib/i18n/config";
 
-function hasLocale(pathname: string) {
-  return locales.some((locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
+const localePrefixes = ["de"] as const;
+
+function getLocalePrefix(pathname: string) {
+  return localePrefixes.find(
+    (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
+  );
+}
+
+function stripLocalePrefix(pathname: string, locale: (typeof localePrefixes)[number]) {
+  const localePrefix = `/${locale}`;
+  const nextPath = pathname.startsWith(localePrefix)
+    ? pathname.slice(localePrefix.length)
+    : pathname;
+
+  return nextPath ? nextPath : "/";
 }
 
 function isMaintenanceModeEnabled() {
@@ -44,6 +57,8 @@ export function proxy(request: NextRequest) {
 
   if (
     pathname.startsWith("/_next") ||
+    pathname === "/api" ||
+    pathname.startsWith("/api/") ||
     pathname === "/robots.txt" ||
     pathname === "/sitemap.xml" ||
     pathname.includes(".")
@@ -51,9 +66,19 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (!hasLocale(pathname)) {
+  const locale = getLocalePrefix(pathname);
+
+  if (locale) {
+    const publicPath = stripLocalePrefix(pathname, locale);
+
+    if (publicPath === "/admin/import" || publicPath.startsWith("/admin/import/")) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = `/${defaultLocale}/admin/import`;
+      return NextResponse.redirect(redirectUrl);
+    }
+
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = `/${defaultLocale}${pathname}`;
+    redirectUrl.pathname = publicPath;
     return NextResponse.redirect(redirectUrl);
   }
 

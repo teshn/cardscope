@@ -12,13 +12,8 @@ export const siteConfig = {
     "CardScope helps collectors inspect card details, verify authenticity signals, and compare printings.",
 };
 
-export const locales: Locale[] = ["en", "de"];
+export const locales: Locale[] = ["en"];
 export const defaultLocale: Locale = "en";
-
-export const localeLabels: Record<Locale, string> = {
-  en: "English",
-  de: "Deutsch",
-};
 
 export const tcgs: TcgSummary[] = [
   {

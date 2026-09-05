@@ -1,10 +1,26 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { CardHoverLink } from "@/components/card/card-hover-link";
 import { getCardsByCategory, illustrators } from "@/data/mock-cards";
 import { isLocale } from "@/lib/i18n/config";
+import { canonicalMetadata } from "@/lib/seo/metadata";
 
 type CategoryPageParams = Promise<{ locale: string; slug: string }>;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: CategoryPageParams;
+}) {
+  const { locale, slug } = await params;
+
+  if (!isLocale(locale)) {
+    return {};
+  }
+
+  return canonicalMetadata(`/category/${slug}`);
+}
 
 export default async function CategoryPage({
   params,
@@ -17,13 +33,12 @@ export default async function CategoryPage({
     notFound();
   }
 
+  const isIllustratorCategory = slug === "illustrator";
   const cards = getCardsByCategory(slug);
 
-  if (!cards.length) {
+  if (!cards.length && !isIllustratorCategory) {
     notFound();
   }
-
-  const isIllustratorCategory = slug === "illustrator";
 
   return (
     <div className="space-y-6">
@@ -53,14 +68,15 @@ export default async function CategoryPage({
 
       <section className="grid gap-3 md:grid-cols-2">
         {cards.map((card) => (
-          <Link
+          <CardHoverLink
             key={card.id}
             href={`/${locale}/card/${card.cardSlug}/${card.printingSlug}`}
+            imageUrl={card.imageUrl}
             className="border border-[var(--ink)] bg-[var(--paper)] p-4 hover:bg-[var(--ink)] hover:text-[var(--paper)]"
           >
             <p className="font-semibold">{card.cardName}</p>
             <p className="mt-1 text-sm text-[var(--muted)]">{card.tcgSlug} • {card.setName}</p>
-          </Link>
+          </CardHoverLink>
         ))}
       </section>
     </div>

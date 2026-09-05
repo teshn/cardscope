@@ -1,11 +1,26 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { CardHoverLink } from "@/components/card/card-hover-link";
 import { AdSlot } from "@/components/monetization/ad-slot";
 import { getCardsByTcg, tcgs } from "@/data/mock-cards";
 import { isLocale } from "@/lib/i18n/config";
+import { canonicalMetadata } from "@/lib/seo/metadata";
 
 type TcgPageParams = Promise<{ locale: string; tcgSlug: string }>;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: TcgPageParams;
+}) {
+  const { locale, tcgSlug } = await params;
+
+  if (!isLocale(locale)) {
+    return {};
+  }
+
+  return canonicalMetadata(`/tcg/${tcgSlug}`);
+}
 
 export default async function TcgPage({
   params,
@@ -36,16 +51,17 @@ export default async function TcgPage({
 
       <section className="grid gap-3 md:grid-cols-2">
         {cards.map((card) => (
-          <Link
+          <CardHoverLink
             key={card.id}
             href={`/${locale}/card/${card.cardSlug}/${card.printingSlug}`}
+            imageUrl={card.imageUrl}
             className="border border-[var(--ink)] bg-[var(--paper)] p-4 hover:bg-[var(--ink)] hover:text-[var(--paper)]"
           >
             <p className="font-semibold">{card.cardName}</p>
             <p className="mt-1 text-sm text-[var(--muted)]">
               {card.setName} • {card.cardNumber} • {card.rarity}
             </p>
-          </Link>
+          </CardHoverLink>
         ))}
       </section>
     </div>
