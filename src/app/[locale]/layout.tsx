@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { PageShell } from "@/components/layout/page-shell";
+import { siteConfig } from "@/data/mock-cards";
 import { isLocale, locales } from "@/lib/i18n/config";
 
 type LocaleLayoutParams = Promise<{ locale: string }>;
@@ -17,11 +18,13 @@ export function generateStaticParams() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const headerStore = await headers();
-  const canonical = headerStore.get("x-public-pathname");
+  const pathname = headerStore.get("x-public-pathname");
 
-  if (!canonical) {
+  if (!pathname) {
     return {};
   }
+
+  const canonical = new URL(pathname, siteConfig.url).toString();
 
   return {
     alternates: {
