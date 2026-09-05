@@ -71,7 +71,7 @@ export function proxy(request: NextRequest) {
   if (locale) {
     const publicPath = stripLocalePrefix(pathname, locale);
 
-    if (publicPath === "/admin/import") {
+    if (publicPath === "/admin/import" || publicPath.startsWith("/admin/import/")) {
       const redirectUrl = request.nextUrl.clone();
       redirectUrl.pathname = `/${defaultLocale}/admin/import`;
       return NextResponse.redirect(redirectUrl);
