@@ -1,7 +1,22 @@
 import { isLocale } from "@/lib/i18n/config";
+import { canonicalMetadata } from "@/lib/seo/metadata";
 import { notFound } from "next/navigation";
 
 type CookiesPageParams = Promise<{ locale: string }>;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: CookiesPageParams;
+}) {
+  const { locale } = await params;
+
+  if (!isLocale(locale)) {
+    return {};
+  }
+
+  return canonicalMetadata("/legal/cookies");
+}
 
 export default async function CookiesPage({ params }: { params: CookiesPageParams }) {
   const { locale } = await params;

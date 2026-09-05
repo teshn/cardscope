@@ -4,8 +4,23 @@ import { notFound } from "next/navigation";
 import { AdSlot } from "@/components/monetization/ad-slot";
 import { getCardsByTcg, tcgs } from "@/data/mock-cards";
 import { isLocale } from "@/lib/i18n/config";
+import { canonicalMetadata } from "@/lib/seo/metadata";
 
 type TcgPageParams = Promise<{ locale: string; tcgSlug: string }>;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: TcgPageParams;
+}) {
+  const { locale, tcgSlug } = await params;
+
+  if (!isLocale(locale)) {
+    return {};
+  }
+
+  return canonicalMetadata(`/tcg/${tcgSlug}`);
+}
 
 export default async function TcgPage({
   params,

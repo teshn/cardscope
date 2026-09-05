@@ -2,10 +2,12 @@
 
 import { useEffect } from "react";
 
+import type { Locale } from "@/types/card";
+
 type ViewTrackerProps = {
   tcgSlug: string;
   cardPrintingId: string;
-  locale: "en" | "de";
+  locale: Locale;
   categorySlug?: string;
 };
 

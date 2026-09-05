@@ -5,13 +5,13 @@ import { notFound } from "next/navigation";
 import { CardInspector } from "@/components/card/card-inspector";
 import { CardTiltCanvas } from "@/components/card/card-tilt-canvas";
 import { ViewTracker } from "@/components/card/view-tracker";
+import { PageShell } from "@/components/layout/page-shell";
 import { AdSlot } from "@/components/monetization/ad-slot";
 import { getCardBySlug, siteConfig } from "@/data/mock-cards";
-import { isLocale } from "@/lib/i18n/config";
+import { defaultLocale } from "@/lib/i18n/config";
 import { breadcrumbStructuredData, cardStructuredData } from "@/lib/seo/structuredData";
 
-type CardDetailParams = Promise<{
-  locale: string;
+type PublicCardDetailParams = Promise<{
   cardSlug: string;
   printingSlug: string;
 }>;
@@ -19,15 +19,11 @@ type CardDetailParams = Promise<{
 export async function generateMetadata({
   params,
 }: {
-  params: CardDetailParams;
+  params: PublicCardDetailParams;
 }) {
-  const { locale, cardSlug, printingSlug } = await params;
-
-  if (!isLocale(locale)) {
-    return {};
-  }
-
+  const { cardSlug, printingSlug } = await params;
   const card = getCardBySlug(cardSlug, printingSlug);
+
   if (!card) {
     return {};
   }
@@ -62,18 +58,14 @@ export async function generateMetadata({
   };
 }
 
-export default async function CardDetailPage({
+export default async function PublicCardDetailPage({
   params,
 }: {
-  params: CardDetailParams;
+  params: PublicCardDetailParams;
 }) {
-  const { locale, cardSlug, printingSlug } = await params;
-
-  if (!isLocale(locale)) {
-    notFound();
-  }
-
+  const { cardSlug, printingSlug } = await params;
   const card = getCardBySlug(cardSlug, printingSlug);
+
   if (!card) {
     notFound();
   }
@@ -89,37 +81,39 @@ export default async function CardDetailPage({
   ]);
 
   return (
-    <div className="space-y-6">
-      <ViewTracker tcgSlug={card.tcgSlug} cardPrintingId={card.id} locale={locale} />
-      <Script id="card-schema" type="application/ld+json">
-        {JSON.stringify(productData)}
-      </Script>
-      <Script id="breadcrumb-schema" type="application/ld+json">
-        {JSON.stringify(breadcrumbData)}
-      </Script>
+    <PageShell locale={defaultLocale}>
+      <div className="space-y-6">
+        <ViewTracker tcgSlug={card.tcgSlug} cardPrintingId={card.id} locale={defaultLocale} />
+        <Script id="card-schema" type="application/ld+json">
+          {JSON.stringify(productData)}
+        </Script>
+        <Script id="breadcrumb-schema" type="application/ld+json">
+          {JSON.stringify(breadcrumbData)}
+        </Script>
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        <div className="border-2 border-[var(--ink)] bg-[var(--paper)] p-4">
-          <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--muted)]">Card Preview</p>
-          <div className="relative mt-3 aspect-[4/5] overflow-hidden border border-[var(--ink)]">
-            <Image src={card.imageUrl} alt={card.cardName} fill className="object-cover" />
+        <section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+          <div className="border-2 border-[var(--ink)] bg-[var(--paper)] p-4">
+            <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--muted)]">Card Preview</p>
+            <div className="relative mt-3 aspect-[4/5] overflow-hidden border border-[var(--ink)]">
+              <Image src={card.imageUrl} alt={card.cardName} fill className="object-cover" />
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-4">
-          <section className="border-2 border-[var(--ink)] bg-[var(--paper)] p-4">
-            <h1 className="text-3xl font-semibold tracking-tight">{card.cardName}</h1>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              {card.setName} • {card.cardNumber} • {card.rarity}
-            </p>
-          </section>
-          <CardInspector card={card} />
-        </div>
-      </section>
+          <div className="space-y-4">
+            <section className="border-2 border-[var(--ink)] bg-[var(--paper)] p-4">
+              <h1 className="text-3xl font-semibold tracking-tight">{card.cardName}</h1>
+              <p className="mt-2 text-sm text-[var(--muted)]">
+                {card.setName} • {card.cardNumber} • {card.rarity}
+              </p>
+            </section>
+            <CardInspector card={card} />
+          </div>
+        </section>
 
-      <AdSlot variant="feature" label="Card Detail In-Content Ad" />
+        <AdSlot variant="feature" label="Card Detail In-Content Ad" />
 
-      <CardTiltCanvas imageUrl={card.imageUrl} title={card.cardName} />
-    </div>
+        <CardTiltCanvas imageUrl={card.imageUrl} title={card.cardName} />
+      </div>
+    </PageShell>
   );
 }
