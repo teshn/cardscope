@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
+import { defaultLocale } from "@/lib/i18n/config";
 import type { TcgSummary } from "@/types/card";
 
 type MegaMenuProps = {
@@ -18,7 +19,7 @@ export function MegaMenu({ tcgs }: MegaMenuProps) {
     () => [
       { href: "/category/illustrator", label: "Illustrators" },
       { href: "/category/rarity", label: "Rarity" },
-      { href: "/admin/import", label: "Admin Import" },
+      { href: `/${defaultLocale}/admin/import`, label: "Admin Import" },
     ],
     [],
   );

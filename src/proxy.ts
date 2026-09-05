@@ -20,19 +20,6 @@ function stripLocalePrefix(pathname: string, locale: (typeof localePrefixes)[num
   return nextPath ? nextPath : "/";
 }
 
-function hasCleanPublicRoute(pathname: string) {
-  return (
-    pathname === "/" ||
-    /^\/illustrator\/[^/]+$/.test(pathname) ||
-    /^\/tcg\/[^/]+$/.test(pathname) ||
-    /^\/category\/[^/]+$/.test(pathname) ||
-    /^\/card\/[^/]+\/[^/]+$/.test(pathname) ||
-    pathname === "/admin/import" ||
-    pathname === "/legal/privacy" ||
-    pathname === "/legal/cookies"
-  );
-}
-
 function isMaintenanceModeEnabled() {
   const rawValue =
     process.env.MAINTENANCE_MODE ??
@@ -83,19 +70,24 @@ export function proxy(request: NextRequest) {
   const locale = getLocalePrefix(pathname);
 
   if (locale) {
+    const publicPath = stripLocalePrefix(pathname, locale);
+
+    if (publicPath === "/admin/import") {
+      if (locale === defaultLocale) {
+        return NextResponse.next();
+      }
+
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = `/${defaultLocale}/admin/import`;
+      return NextResponse.redirect(redirectUrl);
+    }
+
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = stripLocalePrefix(pathname, locale);
+    redirectUrl.pathname = publicPath;
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (hasCleanPublicRoute(pathname)) {
-    return NextResponse.next();
-  }
-
-  const rewriteUrl = request.nextUrl.clone();
-  rewriteUrl.pathname = pathname === "/" ? `/${defaultLocale}` : `/${defaultLocale}${pathname}`;
-
-  return NextResponse.rewrite(rewriteUrl);
+  return NextResponse.next();
 }
 
 export const config = {

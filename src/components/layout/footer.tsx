@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { defaultLocale } from "@/lib/i18n/config";
+
 export function Footer() {
   return (
     <footer className="mt-16 border-t-2 border-[var(--ink)] bg-[var(--paper-strong)]">
@@ -20,7 +22,7 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/admin/import" className="hover:underline">
+              <Link href={`/${defaultLocale}/admin/import`} className="hover:underline">
                 CSV Import Admin
               </Link>
             </li>
