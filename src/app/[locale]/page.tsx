@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { CardHoverLink } from "@/components/card/card-hover-link";
 import { AdSlot } from "@/components/monetization/ad-slot";
 import { cardPrintings, tcgs } from "@/data/mock-cards";
 import { getMessages, isLocale } from "@/lib/i18n/config";
@@ -65,9 +66,10 @@ export default async function LocalizedHome({
         <h2 className="font-mono text-xs uppercase tracking-[0.26em]">Trending Cards</h2>
         <div className="grid gap-3 md:grid-cols-2">
           {cardPrintings.slice(0, 4).map((card) => (
-            <Link
+            <CardHoverLink
               key={card.id}
               href={`/${locale}/card/${card.cardSlug}/${card.printingSlug}`}
+              imageUrl={card.imageUrl}
               className="group border border-[var(--ink)] bg-[var(--paper)] p-4 hover:bg-[var(--ink)] hover:text-[var(--paper)]"
             >
               <div className="flex items-center justify-between gap-4">
@@ -79,7 +81,7 @@ export default async function LocalizedHome({
                 </div>
                 <p className="text-[10px] uppercase tracking-[0.2em]">Inspect</p>
               </div>
-            </Link>
+            </CardHoverLink>
           ))}
         </div>
       </section>
