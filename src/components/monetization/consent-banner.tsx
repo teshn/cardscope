@@ -34,7 +34,8 @@ export function ConsentBanner() {
     >
       <p className="font-mono text-[10px] uppercase tracking-[0.24em]">Cookie Preferences</p>
       <p className="mt-2 text-sm text-[var(--muted)]">
-        CardScope uses analytics and ad cookies only after consent. You can change this later in settings.
+        CardScope uses optional ad cookies only after consent. Required cookies and Vercel Speed Insights remain
+        active for security and performance.
       </p>
       <div className="mt-3 flex flex-wrap gap-2 text-xs uppercase tracking-[0.14em]">
         <button
