@@ -35,7 +35,7 @@ export default async function IllustratorPage({
         {cards.map((card) => (
           <Link
             key={card.id}
-            href={`/${locale}/card/${card.cardSlug}/${card.printingSlug}`}
+            href={`/card/${card.cardSlug}/${card.printingSlug}`}
             className="border border-[var(--ink)] bg-[var(--paper)] p-4 hover:bg-[var(--ink)] hover:text-[var(--paper)]"
           >
             <p className="font-semibold">{card.cardName}</p>

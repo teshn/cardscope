@@ -1,4 +1,4 @@
-export type Locale = "en" | "de";
+export type Locale = "en";
 
 export type TcgSummary = {
   slug: string;

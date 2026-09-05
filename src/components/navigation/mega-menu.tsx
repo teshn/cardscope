@@ -5,24 +5,22 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import { localeLabels } from "@/lib/i18n/config";
-import type { Locale, TcgSummary } from "@/types/card";
+import type { TcgSummary } from "@/types/card";
 
 type MegaMenuProps = {
-  locale: Locale;
   tcgs: TcgSummary[];
 };
 
-export function MegaMenu({ locale, tcgs }: MegaMenuProps) {
+export function MegaMenu({ tcgs }: MegaMenuProps) {
   const [open, setOpen] = useState(false);
 
   const importantLinks = useMemo(
     () => [
-      { href: `/${locale}/category/illustrator`, label: "Illustrators" },
-      { href: `/${locale}/category/rarity`, label: "Rarity" },
-      { href: `/${locale}/admin/import`, label: "Admin Import" },
+      { href: "/category/illustrator", label: "Illustrators" },
+      { href: "/category/rarity", label: "Rarity" },
+      { href: "/admin/import", label: "Admin Import" },
     ],
-    [locale],
+    [],
   );
 
   return (
@@ -57,7 +55,7 @@ export function MegaMenu({ locale, tcgs }: MegaMenuProps) {
                   {tcgs.map((tcg) => (
                     <Link
                       key={tcg.slug}
-                      href={`/${locale}/tcg/${tcg.slug}`}
+                      href={`/tcg/${tcg.slug}`}
                       className="group border border-[var(--ink)] p-3 transition hover:bg-[var(--ink)] hover:text-[var(--paper)]"
                       onClick={() => setOpen(false)}
                     >
@@ -84,9 +82,6 @@ export function MegaMenu({ locale, tcgs }: MegaMenuProps) {
                     </Link>
                   ))}
                 </div>
-                <p className="mt-4 text-xs text-[var(--muted)]">
-                  Locale: {localeLabels[locale]}
-                </p>
               </section>
             </div>
           </motion.div>

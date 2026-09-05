@@ -51,7 +51,7 @@ export default async function LocalizedHome({
           {tcgs.map((tcg) => (
             <Link
               key={tcg.slug}
-              href={`/${locale}/tcg/${tcg.slug}`}
+              href={`/tcg/${tcg.slug}`}
               className="border-2 border-[var(--ink)] bg-[var(--paper)] p-4 transition-transform duration-200 hover:-translate-y-1"
             >
               <p className="font-semibold">{tcg.name}</p>
@@ -67,7 +67,7 @@ export default async function LocalizedHome({
           {cardPrintings.slice(0, 4).map((card) => (
             <Link
               key={card.id}
-              href={`/${locale}/card/${card.cardSlug}/${card.printingSlug}`}
+              href={`/card/${card.cardSlug}/${card.printingSlug}`}
               className="group border border-[var(--ink)] bg-[var(--paper)] p-4 hover:bg-[var(--ink)] hover:text-[var(--paper)]"
             >
               <div className="flex items-center justify-between gap-4">

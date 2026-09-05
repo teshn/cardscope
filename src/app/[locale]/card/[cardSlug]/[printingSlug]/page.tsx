@@ -32,7 +32,7 @@ export async function generateMetadata({
     return {};
   }
 
-  const path = `/${locale}/card/${card.cardSlug}/${card.printingSlug}`;
+  const path = `/card/${card.cardSlug}/${card.printingSlug}`;
 
   return {
     title: `${card.cardName} (${card.cardNumber})`,
@@ -80,11 +80,11 @@ export default async function CardDetailPage({
 
   const productData = cardStructuredData(card);
   const breadcrumbData = breadcrumbStructuredData([
-    { name: "CardScope", url: `${siteConfig.url}/${locale}` },
-    { name: card.tcgSlug, url: `${siteConfig.url}/${locale}/tcg/${card.tcgSlug}` },
+    { name: "CardScope", url: siteConfig.url },
+    { name: card.tcgSlug, url: `${siteConfig.url}/tcg/${card.tcgSlug}` },
     {
       name: card.cardName,
-      url: `${siteConfig.url}/${locale}/card/${card.cardSlug}/${card.printingSlug}`,
+      url: `${siteConfig.url}/card/${card.cardSlug}/${card.printingSlug}`,
     },
   ]);
 
