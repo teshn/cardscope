@@ -5,9 +5,10 @@ const CONSENT_EVENT = "cardscope-consent-change";
 const DONATION_DISMISS_MAX_AGE = 60 * 60 * 24;
 
 function hasCookie(name: string) {
-  return document.cookie
-    .split(";")
-    .some((cookie) => cookie.trim().startsWith(`${name}=`));
+  return document.cookie.split(";").some((cookie) => {
+    const [cookieName] = cookie.trim().split("=", 1);
+    return cookieName === name;
+  });
 }
 
 export type ConsentState = "accepted" | "rejected" | "unset";
