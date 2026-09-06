@@ -1,8 +1,13 @@
 import { PageShell } from "@/components/layout/page-shell";
 import { defaultLocale } from "@/lib/i18n/config";
-import { canonicalMetadata } from "@/lib/seo/metadata";
+import { pageMetadata } from "@/lib/seo/metadata";
 
-export const metadata = canonicalMetadata("/legal/cookies");
+export const metadata = pageMetadata("/legal/cookies", {
+  title: "Cookie Policy",
+  description:
+    "Review required and optional cookies used by CardScope, including consent controls for analytics and advertising.",
+  keywords: ["CardScope cookies", "cookie policy", "consent"],
+});
 
 export default function PublicCookiesPage() {
   return (

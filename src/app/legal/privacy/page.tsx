@@ -1,8 +1,13 @@
 import { PageShell } from "@/components/layout/page-shell";
 import { defaultLocale } from "@/lib/i18n/config";
-import { canonicalMetadata } from "@/lib/seo/metadata";
+import { pageMetadata } from "@/lib/seo/metadata";
 
-export const metadata = canonicalMetadata("/legal/privacy");
+export const metadata = pageMetadata("/legal/privacy", {
+  title: "Privacy Policy",
+  description:
+    "Learn how CardScope handles telemetry, personal data, and consent controls for analytics and advertising cookies.",
+  keywords: ["CardScope privacy", "privacy policy", "telemetry"],
+});
 
 export default function PublicPrivacyPage() {
   return (

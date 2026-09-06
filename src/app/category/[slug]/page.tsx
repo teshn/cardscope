@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { PageShell } from "@/components/layout/page-shell";
 import { getCardsByCategory, illustrators } from "@/data/mock-cards";
 import { defaultLocale } from "@/lib/i18n/config";
-import { canonicalMetadata } from "@/lib/seo/metadata";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 type PublicCategoryPageParams = Promise<{ slug: string }>;
 
@@ -14,8 +14,21 @@ export async function generateMetadata({
   params: PublicCategoryPageParams;
 }) {
   const { slug } = await params;
+  const isIllustratorCategory = slug === "illustrator";
+  const cards = getCardsByCategory(slug);
 
-  return canonicalMetadata(`/category/${slug}`);
+  if (!cards.length && !isIllustratorCategory) {
+    return {};
+  }
+
+  return pageMetadata(`/category/${slug}`, {
+    title: `Category: ${slug}`,
+    description:
+      slug === "illustrator"
+        ? "Browse cards by illustrator and compare print details and verification signals."
+        : `Explore ${slug} card listings with CardScope verification facts and print attributes.`,
+    keywords: [slug, "trading card category", "card comparison"],
+  });
 }
 
 export default async function PublicCategoryPage({

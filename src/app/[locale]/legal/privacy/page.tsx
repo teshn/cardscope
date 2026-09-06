@@ -1,5 +1,5 @@
 import { isLocale } from "@/lib/i18n/config";
-import { canonicalMetadata } from "@/lib/seo/metadata";
+import { pageMetadata } from "@/lib/seo/metadata";
 import { notFound } from "next/navigation";
 
 type PrivacyPageParams = Promise<{ locale: string }>;
@@ -15,7 +15,12 @@ export async function generateMetadata({
     return {};
   }
 
-  return canonicalMetadata("/legal/privacy");
+  return pageMetadata("/legal/privacy", {
+    title: "Privacy Policy",
+    description:
+      "Learn how CardScope handles telemetry, personal data, and consent controls for analytics and advertising cookies.",
+    keywords: ["CardScope privacy", "privacy policy", "telemetry"],
+  });
 }
 
 export default async function PrivacyPage({ params }: { params: PrivacyPageParams }) {

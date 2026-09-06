@@ -4,7 +4,7 @@ import { CardHoverLink } from "@/components/card/card-hover-link";
 import { AdSlot } from "@/components/monetization/ad-slot";
 import { getCardsByTcg, tcgs } from "@/data/mock-cards";
 import { isLocale } from "@/lib/i18n/config";
-import { canonicalMetadata } from "@/lib/seo/metadata";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 type TcgPageParams = Promise<{ locale: string; tcgSlug: string }>;
 
@@ -19,7 +19,16 @@ export async function generateMetadata({
     return {};
   }
 
-  return canonicalMetadata(`/tcg/${tcgSlug}`);
+  const tcg = tcgs.find((entry) => entry.slug === tcgSlug);
+  if (!tcg) {
+    return {};
+  }
+
+  return pageMetadata(`/tcg/${tcgSlug}`, {
+    title: `${tcg.name} Card Database`,
+    description: `${tcg.description} Explore print variants, authenticity indicators, and detailed card facts on CardScope.`,
+    keywords: [tcg.name, tcg.slug, "card set lookup", "card print variants"],
+  });
 }
 
 export default async function TcgPage({

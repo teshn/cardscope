@@ -8,6 +8,7 @@ import { ViewTracker } from "@/components/card/view-tracker";
 import { AdSlot } from "@/components/monetization/ad-slot";
 import { getCardBySlug, siteConfig } from "@/data/mock-cards";
 import { isLocale } from "@/lib/i18n/config";
+import { cardDetailMetadata } from "@/lib/seo/metadata";
 import { breadcrumbStructuredData, cardStructuredData } from "@/lib/seo/structuredData";
 
 type CardDetailParams = Promise<{
@@ -32,34 +33,7 @@ export async function generateMetadata({
     return {};
   }
 
-  const path = `/card/${card.cardSlug}/${card.printingSlug}`;
-
-  return {
-    title: `${card.cardName} (${card.cardNumber})`,
-    description: `Inspect ${card.cardName} with dimensions, print date, variant, illustrator, and anti-counterfeit reference fields.`,
-    alternates: {
-      canonical: `${siteConfig.url}${path}`,
-    },
-    openGraph: {
-      title: `${card.cardName} • ${card.setCode}`,
-      description: `CardScope detail for ${card.cardName} ${card.cardNumber}.`,
-      url: `${siteConfig.url}${path}`,
-      images: [
-        {
-          url: `${siteConfig.url}/api/og/card?cardSlug=${card.cardSlug}&printingSlug=${card.printingSlug}`,
-          width: 1200,
-          height: 630,
-          alt: `${card.cardName} preview`,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${card.cardName} • ${card.setCode}`,
-      description: `Verify ${card.cardName} print details on CardScope.`,
-      images: [`${siteConfig.url}/api/og/card?cardSlug=${card.cardSlug}&printingSlug=${card.printingSlug}`],
-    },
-  };
+  return cardDetailMetadata(card);
 }
 
 export default async function CardDetailPage({
