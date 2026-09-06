@@ -1,6 +1,6 @@
 import { HomePage } from "@/components/home/home-page";
 import { isLocale } from "@/lib/i18n/config";
-import { canonicalMetadata } from "@/lib/seo/metadata";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 type LocalizedHomeParams = Promise<{ locale: string }>;
 
@@ -15,7 +15,12 @@ export async function generateMetadata({
     return {};
   }
 
-  return canonicalMetadata("/");
+  return pageMetadata("/", {
+    title: "Card Detail Verification",
+    description:
+      "Inspect trading card dimensions, weight, print variants, illustrator details, and authenticity signals with CardScope.",
+    keywords: ["trading card verification", "card lookup", "card authenticity"],
+  });
 }
 
 export default async function LocalizedHome({

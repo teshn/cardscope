@@ -1,13 +1,10 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata("/maintenance", {
   title: "Maintenance",
   description: "CardScope is temporarily unavailable while maintenance is in progress.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+  noIndex: true,
+});
 
 export default function MaintenancePage() {
   return (

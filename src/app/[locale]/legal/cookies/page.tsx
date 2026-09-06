@@ -1,5 +1,5 @@
 import { isLocale } from "@/lib/i18n/config";
-import { canonicalMetadata } from "@/lib/seo/metadata";
+import { pageMetadata } from "@/lib/seo/metadata";
 import { notFound } from "next/navigation";
 
 type CookiesPageParams = Promise<{ locale: string }>;
@@ -15,7 +15,12 @@ export async function generateMetadata({
     return {};
   }
 
-  return canonicalMetadata("/legal/cookies");
+  return pageMetadata("/legal/cookies", {
+    title: "Cookie Policy",
+    description:
+      "Review required and optional cookies used by CardScope, including consent controls for analytics and advertising.",
+    keywords: ["CardScope cookies", "cookie policy", "consent"],
+  });
 }
 
 export default async function CookiesPage({ params }: { params: CookiesPageParams }) {

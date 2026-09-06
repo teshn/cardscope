@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { CardHoverLink } from "@/components/card/card-hover-link";
 import { getCardsByCategory, illustrators } from "@/data/mock-cards";
 import { isLocale } from "@/lib/i18n/config";
-import { canonicalMetadata } from "@/lib/seo/metadata";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 type CategoryPageParams = Promise<{ locale: string; slug: string }>;
 
@@ -19,7 +19,21 @@ export async function generateMetadata({
     return {};
   }
 
-  return canonicalMetadata(`/category/${slug}`);
+  const isIllustratorCategory = slug === "illustrator";
+  const cards = getCardsByCategory(slug);
+
+  if (!cards.length && !isIllustratorCategory) {
+    return {};
+  }
+
+  return pageMetadata(`/category/${slug}`, {
+    title: `Category: ${slug}`,
+    description:
+      slug === "illustrator"
+        ? "Browse cards by illustrator and compare print details and verification signals."
+        : `Explore ${slug} card listings with CardScope verification facts and print attributes.`,
+    keywords: [slug, "trading card category", "card comparison"],
+  });
 }
 
 export default async function CategoryPage({

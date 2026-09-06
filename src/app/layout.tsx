@@ -20,12 +20,20 @@ const silkscreen = Silkscreen({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://cardscope.example"),
+  applicationName: "CardScope",
   title: {
     default: "CardScope | Card Detail Verification",
     template: "%s | CardScope",
   },
   description:
     "CardScope is a share-ready card lookup platform for checking dimensions, weight, print version, illustrator, and authenticity-related signals.",
+  category: "Collectibles",
+  referrer: "origin-when-cross-origin",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   robots: {
     index: true,
     follow: true,
@@ -36,6 +44,17 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
       "max-snippet": -1,
     },
+  },
+  openGraph: {
+    type: "website",
+    siteName: "CardScope",
+    description:
+      "CardScope is a share-ready card lookup platform for checking dimensions, weight, print version, illustrator, and authenticity-related signals.",
+  },
+  twitter: {
+    card: "summary",
+    description:
+      "CardScope is a share-ready card lookup platform for checking dimensions, weight, print version, illustrator, and authenticity-related signals.",
   },
 };
 
